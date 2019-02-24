@@ -4,14 +4,17 @@ document.onkeydown = checkKey;
 
 const probOf4 = 0.12; //used in generateNumber method
 
+let matrix; //matrix of the game
 
-//Matrix of the game
-let matrix = [
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0]
-];
+//Initialize the matrix
+function initializeMatrix() {
+    matrix = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+    ];
+}
 
 
 //Renders our matrix variable
@@ -28,6 +31,14 @@ function renderMatrix() {
         }
         matrixHtml.innerHTML += "<br/>";
     }
+};
+
+//Initialize the game
+function init() {
+    initializeMatrix();
+    addNumber();
+    addNumber();
+    renderMatrix();
 };
 
 
@@ -66,7 +77,7 @@ function getEmptyCells() {
 
 
 //Adds new numbers for each play
-function addingNumbers() {
+function addNumber() {
 
     //Generates an index number to put the number in a random empty cell
     //Does not add any number if no empty cell.
@@ -79,16 +90,10 @@ function addingNumbers() {
 
 };
 
-function init() {
-    //TODO: function to reset matrix
-    addingNumbers();
-    addingNumbers();
-    renderMatrix();
-}
-
 
 //Moves every cell up
 function moveUp() {
+    let moved = false;
 
     //Checks by column from up to down
     for(let j = 0; j < 4; j++) {
@@ -104,6 +109,7 @@ function moveUp() {
                     if(matrix[k][j] == 0) {
                         matrix[k][j] = matrix[i][j];
                         matrix[i][j] = 0;
+                        moved = true;
                     }
 
                     //Limitation to avoid going out of bound
@@ -113,20 +119,22 @@ function moveUp() {
                         if(matrix[k][j] == matrix[k-1][j]) {
                             matrix[k-1][j] += matrix[k][j];
                             matrix[k][j] = 0;
+                            moved = true;
                         }
 
                     }
 
                 }
-
             }
         }
     }
+    return moved;
 };
 
 
 //Moves every cell down
 function moveDown() {
+    let moved = false;
 
     //Checks by column from down to up
     for(let j = 0; j < 4; j++) {
@@ -142,6 +150,7 @@ function moveDown() {
                     if(matrix[k][j] == 0) {
                         matrix[k][j] = matrix[i][j];
                         matrix[i][j] = 0;
+                        moved = true;
                     }
 
                     //Limitation to avoid going out of bound
@@ -151,20 +160,22 @@ function moveDown() {
                         if(matrix[k][j] == matrix[k+1][j]) {
                             matrix[k+1][j] += matrix[k][j];
                             matrix[k][j] = 0;
+                            moved = true;
                         }
 
                     }
 
                 }
-
             }
         }
     }
+    return moved;
 };
 
 
 //Moves every cell left
 function moveLeft() {
+    let moved = false;
 
     //Checks by line from left to right
     for(let i = 0; i < 4; i++) {
@@ -180,6 +191,7 @@ function moveLeft() {
                     if(matrix[i][k] == 0) {
                         matrix[i][k] = matrix[i][j];
                         matrix[i][j] = 0;
+                        moved = true;
                     }
 
                     //Limitation to avoid going out of bound
@@ -189,6 +201,7 @@ function moveLeft() {
                         if(matrix[i][k] == matrix[i][k-1]) {
                             matrix[i][k-1] += matrix[i][k];
                             matrix[i][k] = 0;
+                            moved = true;
                         }
 
                     }
@@ -197,11 +210,13 @@ function moveLeft() {
             }
         }
     }
+    return moved;
 };
 
 
 //Moves every cell right
 function moveRight() {
+    let moved = false;
 
     //Checks by line from right to left
     for(let i = 0; i < 4; i++) {
@@ -217,6 +232,7 @@ function moveRight() {
                     if(matrix[i][k] == 0) {
                         matrix[i][k] = matrix[i][j];
                         matrix[i][j] = 0;
+                        moved = true;
                     }
 
                     //Limitation to avoid going out of bound
@@ -226,6 +242,7 @@ function moveRight() {
                         if(matrix[i][k] == matrix[i][k+1]) {
                             matrix[i][k+1] += matrix[i][k];
                             matrix[i][k] = 0;
+                            moved = true;
                         }
 
                     }
@@ -235,37 +252,43 @@ function moveRight() {
 
         }
     }
-
+    return moved;
 };
 
 
 //User input
 function checkKey(e) {
     e = e || window.event;
+
+    let arrowPressed = false; //if user pressed a key
+    let moved = false; //if moveXX() triggered a movement
+
     if (e.keyCode == '38') {
         // up arrow
-        moveUp();
-        addingNumbers();
-        renderMatrix();
+        moved = moveUp();
+        arrowPressed = true;
     }
     else if (e.keyCode == '40') {
         // down arrow
-        moveDown();
-        addingNumbers();
-        renderMatrix();
+        moved = moveDown();
+        arrowPressed = true;
     }
     else if (e.keyCode == '37') {
         // left arrow
-        moveLeft();
-        addingNumbers();
-        renderMatrix();
+        moved = moveLeft();
+        arrowPressed = true;
     }
     else if (e.keyCode == '39') {
         // right arrow
-        moveRight();
-        addingNumbers();
+        moved = moveRight();
+        arrowPressed = true;
+    }
+
+    if(arrowPressed == true) {
+        if(moved) addNumber(); //only adds a number if movement occured
         renderMatrix();
     }
+
 };
 
 
