@@ -1,4 +1,4 @@
-# 2048 copycat in JS
+# 2048 game copy in JS
 
-Making a 2048 game to work on JavaScript. 
+The famous 2048 game in JavaScript. 
 Planning to use VueJS to make it look good.

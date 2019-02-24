@@ -1,4 +1,7 @@
 let matrixHtml = document.getElementById("matrix");
+
+document.onkeydown = checkKey;
+
 const probOf4 = 0.12; //used in generateNumber method
 
 
@@ -56,7 +59,55 @@ function addingNumbers() {
     }
 }
 
+//Moves every cell up
+function moveUp() {
+
+}
+
+//Moves every cell down
+function moveDown() {
+
+}
+
+//Moves every cell left
+function moveLeft() {
+
+}
+
+//Moves every cell right
+function moveRight() {
+
+}
+
+//User input
+function checkKey(e) {
+    e = e || window.event;
+    if (e.keyCode == '38') {
+        // up arrow
+        moveUp();
+        addingNumbers();
+        renderMatrix();
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+        moveUp();
+        addingNumbers();
+        renderMatrix();
+    }
+    else if (e.keyCode == '37') {
+        // left arrow
+        moveUp();
+        addingNumbers();
+        renderMatrix();
+    }
+    else if (e.keyCode == '39') {
+        // right arrow
+        moveUp();
+        addingNumbers();
+        renderMatrix();
+    }
+}
+
 
 renderMatrix();
-addingNumbers();
-renderMatrix();
+
