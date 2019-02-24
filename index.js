@@ -61,22 +61,38 @@ function addingNumbers() {
 
 //Moves every cell up
 function moveUp() {
-
+    for(let j = 0; j < 4; j++) {
+        for(let i = 0; i < 4; i++) {
+            
+        }
+    }
 }
 
 //Moves every cell down
 function moveDown() {
-
+    for(let j = 0; j < 4; j++) {
+        for(let i = 3; i <= 0; i--) {
+            
+        }
+    }
 }
 
 //Moves every cell left
 function moveLeft() {
-
+    for(let i = 0; i < 4; i++) {
+        for(let j = 0; j < 4; j++) {
+            
+        }
+    }
 }
 
 //Moves every cell right
 function moveRight() {
-
+    for(let i = 0; i < 4; i++) {
+        for(let j = 3; j <= 0; j--) {
+            
+        }
+    }
 }
 
 //User input
