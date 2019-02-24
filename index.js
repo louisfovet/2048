@@ -1,12 +1,20 @@
 let matrixHtml = document.getElementById("matrix");
-const probOf4 = 0.12; 
+const probOf4 = 0.12; //used in generateNumber method
+
+//Matrix of the game
+// let matrix = [
+//     [0,0,0,0],
+//     [0,0,0,0],
+//     [0,0,0,0],
+//     [0,0,0,0]
+// ];
 
 //Matrix of the game
 let matrix = [
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0],
-    [0,0,0,0]
+    [2,2,0,2],
+    [2,0,2,2],
+    [2,2,2,2],
+    [0,2,2,0]
 ];
 
 //Rendering our matrix variable
@@ -35,7 +43,15 @@ function generateNumber() {
 
 //Look for empty cells
 function getEmptyCells() {
-
+    let emptyCells = [];
+    for(let i = 0; i < 4; i++) {
+        for(let j = 0; j < 4; j++) {
+            if(matrix[i][j] == 0) {
+                emptyCells.push([[i],[j]]);
+            }
+        }
+    }
+    return emptyCells;
 }
 
 //Adding new numbers for each play
@@ -44,4 +60,4 @@ function addingNumbers() {
 }
 
 renderMatrix();
-console.log(generateNumber());
+console.log(getEmptyCells());
