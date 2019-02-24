@@ -1,4 +1,5 @@
 let matrixHtml = document.getElementById("matrix");
+const probOf4 = 0.12; 
 
 //Matrix of the game
 let matrix = [
@@ -8,7 +9,7 @@ let matrix = [
     [0,0,0,0]
 ];
 
-//Rendring our matrix variable
+//Rendering our matrix variable
 function renderMatrix() {
     matrixHtml.innerHTML = null;
     for(let i = 0; i < 4; i++) {
@@ -20,12 +21,27 @@ function renderMatrix() {
     }
 };
 
-//Generates a new number (2 or 4)
+//Generates a new number (2, or 4 at probOf4 % of probability)
 function generateNumber() {
-    number = (Math.floor(Math.random()*2)+1)*2;
+    let weight = Math.random();
+    let number;
+    if(weight > probOf4) {
+        number = 2;
+    } else {
+        number = 4;
+    }
     return number;
 };
 
+//Look for empty cells
+function getEmptyCells() {
+
+}
+
+//Adding new numbers for each play
+function addingNumbers() {
+
+}
 
 renderMatrix();
-console.log(generateNew());
+console.log(generateNumber());
