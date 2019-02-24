@@ -69,16 +69,22 @@ function getEmptyCells() {
 function addingNumbers() {
 
     //Generates an index number to put the number in a random empty cell
-    //Adds up to 2 numbers. Does not add any number if no empty cell.
-    for(let i = 0; i < 2; i++) {
-        if(getEmptyCells().length != 0) {
+    //Does not add any number if no empty cell.
+    if(getEmptyCells().length != 0) {
 
-            let index = Math.floor(Math.random() * getEmptyCells().length);
-            matrix[getEmptyCells()[index][0]][getEmptyCells()[index][1]] = generateNumber();
+        let index = Math.floor(Math.random() * getEmptyCells().length);
+        matrix[getEmptyCells()[index][0]][getEmptyCells()[index][1]] = generateNumber();
 
-        }
     }
+
 };
+
+function init() {
+    //TODO: function to reset matrix
+    addingNumbers();
+    addingNumbers();
+    renderMatrix();
+}
 
 
 //Moves every cell up
@@ -98,6 +104,17 @@ function moveUp() {
                     if(matrix[k][j] == 0) {
                         matrix[k][j] = matrix[i][j];
                         matrix[i][j] = 0;
+                    }
+
+                    //Limitation to avoid going out of bound
+                    if(k > 0) {
+                        
+                        //Add value together if one is equal
+                        if(matrix[k][j] == matrix[k-1][j]) {
+                            matrix[k-1][j] += matrix[k][j];
+                            matrix[k][j] = 0;
+                        }
+
                     }
 
                 }
@@ -127,6 +144,17 @@ function moveDown() {
                         matrix[i][j] = 0;
                     }
 
+                    //Limitation to avoid going out of bound
+                    if(k < 3) {
+                        
+                        //Add value together if one is equal
+                        if(matrix[k][j] == matrix[k+1][j]) {
+                            matrix[k+1][j] += matrix[k][j];
+                            matrix[k][j] = 0;
+                        }
+
+                    }
+
                 }
 
             }
@@ -154,6 +182,17 @@ function moveLeft() {
                         matrix[i][j] = 0;
                     }
 
+                    //Limitation to avoid going out of bound
+                    if(k > 0) {
+                        
+                        //Add value together if one is equal
+                        if(matrix[i][k] == matrix[i][k-1]) {
+                            matrix[i][k-1] += matrix[i][k];
+                            matrix[i][k] = 0;
+                        }
+
+                    }
+
                 }
             }
         }
@@ -178,6 +217,17 @@ function moveRight() {
                     if(matrix[i][k] == 0) {
                         matrix[i][k] = matrix[i][j];
                         matrix[i][j] = 0;
+                    }
+
+                    //Limitation to avoid going out of bound
+                    if(k < 3) {
+                        
+                        //Add value together if one is equal
+                        if(matrix[i][k] == matrix[i][k+1]) {
+                            matrix[i][k+1] += matrix[i][k];
+                            matrix[i][k] = 0;
+                        }
+
                     }
 
                 }
@@ -219,5 +269,5 @@ function checkKey(e) {
 };
 
 
-renderMatrix();
 
+init();
