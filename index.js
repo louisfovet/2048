@@ -16,7 +16,7 @@ function initializeMatrix() {
         [0,0,0,0],
         [0,0,0,0],
         [0,0,0,0],
-        [0,0,0,0]
+        [4,4,2,2]
     ];
 }
 
@@ -243,36 +243,53 @@ function moveRight() {
 
     //Checks by line from right to left
     for(let i = 0; i < 4; i++) {
+        console.log("i: " + i);
+
+        //Stores the index of values that already merged
+        let mergedCells = []; 
+
         for(let j = 2; j >= 0; j--) {
+            console.log("j: " + j);
 
             //If cell not 0, we want to move the number
             if(matrix[i][j] != 0) {
 
                 //Checks from right to cell
                 for(let k = 3; k >= j; k--) {
-                    
+                    console.log("k: " + k);
+
                     //Moves the cell if one is empty
                     if(matrix[i][k] == 0) {
+
                         matrix[i][k] = matrix[i][j];
                         matrix[i][j] = 0;
                         moved = true;
-                    }
-
-                    //Limitation to avoid going out of bound
-                    if(k < 3) {
                         
+                        console.log("moved");
+                        break;
+
+                    } 
+                    //Limitation to avoid going out of bound
+                    else if (k < 3) {
+
                         //Add value together if one is equal
                         if(matrix[i][k] == matrix[i][k+1]) {
+
+                            console.log("matrix[i][k]: " + matrix[i][k]);
+                            console.log("matrix[i][k+1]: " + matrix[i][k+1]);
+
                             matrix[i][k+1] += matrix[i][k];
                             matrix[i][k] = 0;
                             moved = true;
+                            mergedCells.push(k+1);
+
+                            console.log("mergedCells: " + mergedCells);
+                            break;
+
                         }
-
                     }
-
                 }
             }
-
         }
     }
     return moved;
