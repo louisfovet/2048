@@ -1,13 +1,15 @@
 let matrixHtml = document.getElementById("matrix");
-let matrixDebugHtml = document.getElementById("matrix_debug");
-let userInputHtml = document.getElementById("user_input");
+let scoreHtml = document.getElementById("score");
 let btnReset = document.getElementById("reset_btn");
+// let matrixDebugHtml = document.getElementById("matrix_debug");
+// let userInputHtml = document.getElementById("user_input");
 
 document.onkeydown = userInput;
 
 const probOf4 = 0.12; //used in generateNumber method
 
 let matrix; //matrix of the game
+let score; //score of the game
 
 
 //Initialize the matrix
@@ -39,20 +41,20 @@ function renderMatrix() {
 
 
 //Renders our matrix variable
-function renderDebugMatrix() {
+// function renderDebugMatrix() {
 
-    matrixDebugHtml.innerHTML = null;
+//     matrixDebugHtml.innerHTML = null;
 
-    for(let i = 0; i < 4; i++) {
-        for(let j = 0; j < 4; j++) {
+//     for(let i = 0; i < 4; i++) {
+//         for(let j = 0; j < 4; j++) {
 
-            matrixDebugHtml.innerHTML += matrix[i][j];
-            if(j != 3) matrixDebugHtml.innerHTML += " | ";
+//             matrixDebugHtml.innerHTML += matrix[i][j];
+//             if(j != 3) matrixDebugHtml.innerHTML += " | ";
 
-        }
-        matrixDebugHtml.innerHTML += "<br/>";
-    }
-};
+//         }
+//         matrixDebugHtml.innerHTML += "<br/>";
+//     }
+// };
 
 
 //Initialize the game
@@ -60,8 +62,11 @@ function init() {
     initializeMatrix();
     addNumber();
     addNumber();
-    renderDebugMatrix();
+    // renderDebugMatrix();
     renderMatrix();
+
+    score = 0;
+    scoreHtml.innerHTML = "Score: " + score;
 };
 
 
@@ -150,6 +155,7 @@ function moveUp() {
                         moved = true;
                         mergedCells.push(k-1);
 
+                        score += matrix[k-1][j];
                         break;
                     }
                 }
@@ -196,6 +202,7 @@ function moveDown() {
                         moved = true;
                         mergedCells.push(k+1);
 
+                        score += matrix[k+1][j];
                         break;
                     }
                 }
@@ -242,6 +249,7 @@ function moveLeft() {
                         moved = true;
                         mergedCells.push(k-1);
 
+                        score += matrix[i][k-1];
                         break;
                     }
                 }
@@ -288,6 +296,7 @@ function moveRight() {
                         moved = true;
                         mergedCells.push(k+1);
                     
+                        score += matrix[i][k+1];
                         break;
                     }
                 }
@@ -305,37 +314,36 @@ function userInput(e) {
     let arrowPressed = false; //if user pressed a key
     let moved = false; //if moveXX() triggered a movement
 
+    // renderDebugMatrix();
+
     if (e.keyCode == '38') {
         // up arrow
-        userInputHtml.innerHTML = "up";
-        renderDebugMatrix();
+        // userInputHtml.innerHTML = "up";
         moved = moveUp();
         arrowPressed = true;
     }
     else if (e.keyCode == '40') {
         // down arrow
-        userInputHtml.innerHTML = "down";
-        renderDebugMatrix();
+        // userInputHtml.innerHTML = "down";
         moved = moveDown();
         arrowPressed = true;
     }
     else if (e.keyCode == '37') {
         // left arrow
-        userInputHtml.innerHTML = "left";
-        renderDebugMatrix();
+        // userInputHtml.innerHTML = "left";
         moved = moveLeft();
         arrowPressed = true;
     }
     else if (e.keyCode == '39') {
         // right arrow
-        userInputHtml.innerHTML = "right";
-        renderDebugMatrix();
+        // userInputHtml.innerHTML = "right";
         moved = moveRight();
         arrowPressed = true;
     }
 
     if(moved) addNumber(); //only adds a number if movement occured
     renderMatrix();
+    scoreHtml.innerHTML = "Score: " + score;
     
 };
 
