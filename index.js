@@ -3,7 +3,7 @@ let matrixDebugHtml = document.getElementById("matrix_debug");
 let userInputHtml = document.getElementById("user_input");
 let btnReset = document.getElementById("reset_btn");
 
-document.onkeydown = checkKey;
+document.onkeydown = userInput;
 
 const probOf4 = 0.12; //used in generateNumber method
 
@@ -16,7 +16,7 @@ function initializeMatrix() {
         [0,0,0,0],
         [0,0,0,0],
         [0,0,0,0],
-        [4,4,2,2]
+        [0,0,0,0]
     ];
 }
 
@@ -120,33 +120,38 @@ function moveUp() {
 
     //Checks by column from up to down
     for(let j = 0; j < 4; j++) {
+
+        //Stores the index of values that already merged
+        let mergedCells = []; 
+
         for(let i = 1; i < 4; i++) {
 
             //If cell not 0, we want to move the number
             if(matrix[i][j] != 0) {
 
-                //Checks from up to cell
-                for(let k = 0; k <= i; k++) {
+                //Checks from cell to up to either move it or merge it
+                for(let k = i; k > 0; k--) {
 
-                    //Moves the cell if one is empty
-                    if(matrix[k][j] == 0) {
-                        matrix[k][j] = matrix[i][j];
-                        matrix[i][j] = 0;
+                    //Moves the cell if the next one is empty
+                    if(matrix[k-1][j] == 0) {
+
+                        matrix[k-1][j] = matrix[k][j];
+                        matrix[k][j] = 0;
                         moved = true;
+
+                    } 
+                    //Add value together if next one is equal
+                    else if ((matrix[k][j] == matrix[k-1][j])
+                        && (!mergedCells.includes(k-1))
+                        && (!mergedCells.includes(k))) {
+
+                        matrix[k-1][j] += matrix[k][j];
+                        matrix[k][j] = 0;
+                        moved = true;
+                        mergedCells.push(k-1);
+
+                        break;
                     }
-
-                    //Limitation to avoid going out of bound
-                    if(k > 0) {
-                        
-                        //Add value together if one is equal
-                        if(matrix[k][j] == matrix[k-1][j]) {
-                            matrix[k-1][j] += matrix[k][j];
-                            matrix[k][j] = 0;
-                            moved = true;
-                        }
-
-                    }
-
                 }
             }
         }
@@ -161,33 +166,38 @@ function moveDown() {
 
     //Checks by column from down to up
     for(let j = 0; j < 4; j++) {
+
+        //Stores the index of values that already merged
+        let mergedCells = []; 
+
         for(let i = 2; i >= 0; i--) {
 
             //If cell not 0, we want to move the number
             if(matrix[i][j] != 0) {
 
-                //Checks from down to cell
-                for(let k = 3; k >= i; k--) {
+                //Checks from cell to down to either move it or merge it
+                for(let k = i; k < 3; k++) {
 
-                    //Moves the cell if one is empty
-                    if(matrix[k][j] == 0) {
-                        matrix[k][j] = matrix[i][j];
-                        matrix[i][j] = 0;
+                    //Moves the cell if the next one is empty
+                    if(matrix[k+1][j] == 0) {
+
+                        matrix[k+1][j] = matrix[k][j];
+                        matrix[k][j] = 0;
                         moved = true;
+
+                    } 
+                    //Add value together if next one is equal
+                    else if ((matrix[k][j] == matrix[k+1][j])
+                        && (!mergedCells.includes(k+1))
+                        && (!mergedCells.includes(k))) {
+
+                        matrix[k+1][j] += matrix[k][j];
+                        matrix[k][j] = 0;
+                        moved = true;
+                        mergedCells.push(k+1);
+
+                        break;
                     }
-
-                    //Limitation to avoid going out of bound
-                    if(k < 3) {
-                        
-                        //Add value together if one is equal
-                        if(matrix[k][j] == matrix[k+1][j]) {
-                            matrix[k+1][j] += matrix[k][j];
-                            matrix[k][j] = 0;
-                            moved = true;
-                        }
-
-                    }
-
                 }
             }
         }
@@ -202,33 +212,38 @@ function moveLeft() {
 
     //Checks by line from left to right
     for(let i = 0; i < 4; i++) {
+
+        //Stores the index of values that already merged
+        let mergedCells = []; 
+
         for(let j = 1; j < 4; j++) {
 
             //If cell not 0, we want to move the number
             if(matrix[i][j] != 0) {
 
-                //Checks from left to cell
-                for(let k = 0; k <= j; k++) {
+                //Checks from cell to left to either move it or merge it
+                for(let k = j; k > 0; k--) {
 
-                    //Moves the cell if one is empty
-                    if(matrix[i][k] == 0) {
-                        matrix[i][k] = matrix[i][j];
-                        matrix[i][j] = 0;
+                    //Moves the cell if the next one is empty
+                    if(matrix[i][k-1] == 0) {
+
+                        matrix[i][k-1] = matrix[i][k];
+                        matrix[i][k] = 0;
                         moved = true;
+
+                    } 
+                    //Add value together if next one is equal
+                    else if ((matrix[i][k] == matrix[i][k-1])
+                     && (!mergedCells.includes(k-1))
+                     && (!mergedCells.includes(k))) {
+
+                        matrix[i][k-1] += matrix[i][k];
+                        matrix[i][k] = 0;
+                        moved = true;
+                        mergedCells.push(k-1);
+
+                        break;
                     }
-
-                    //Limitation to avoid going out of bound
-                    if(k > 0) {
-                        
-                        //Add value together if one is equal
-                        if(matrix[i][k] == matrix[i][k-1]) {
-                            matrix[i][k-1] += matrix[i][k];
-                            matrix[i][k] = 0;
-                            moved = true;
-                        }
-
-                    }
-
                 }
             }
         }
@@ -243,50 +258,37 @@ function moveRight() {
 
     //Checks by line from right to left
     for(let i = 0; i < 4; i++) {
-        console.log("i: " + i);
 
         //Stores the index of values that already merged
         let mergedCells = []; 
 
         for(let j = 2; j >= 0; j--) {
-            console.log("j: " + j);
 
             //If cell not 0, we want to move the number
             if(matrix[i][j] != 0) {
 
-                //Checks from right to cell
-                for(let k = 3; k >= j; k--) {
-                    console.log("k: " + k);
+                //Checks from cell to right to either move it or merge it
+                for(let k = j; k < 3; k++) {
 
-                    //Moves the cell if one is empty
-                    if(matrix[i][k] == 0) {
+                    //Moves the cell if the next one is empty
+                    if(matrix[i][k+1] == 0) {
 
-                        matrix[i][k] = matrix[i][j];
-                        matrix[i][j] = 0;
+                        matrix[i][k+1] = matrix[i][k];
+                        matrix[i][k] = 0;
                         moved = true;
-                        
-                        console.log("moved");
-                        break;
 
                     } 
-                    //Limitation to avoid going out of bound
-                    else if (k < 3) {
+                    //Add value together if next one is equal
+                    else if ((matrix[i][k] == matrix[i][k+1])
+                     && (!mergedCells.includes(k+1))
+                     && (!mergedCells.includes(k))) {
 
-                        //Add value together if one is equal
-                        if(matrix[i][k] == matrix[i][k+1]) {
-
-                            console.log("matrix[i][k]: " + matrix[i][k]);
-                            console.log("matrix[i][k+1]: " + matrix[i][k+1]);
-
-                            matrix[i][k+1] += matrix[i][k];
-                            matrix[i][k] = 0;
-                            moved = true;
-                            mergedCells.push(k+1);
-
-                            console.log("mergedCells: " + mergedCells);
-                            break;
-
-                        }
+                        matrix[i][k+1] += matrix[i][k];
+                        matrix[i][k] = 0;
+                        moved = true;
+                        mergedCells.push(k+1);
+                    
+                        break;
                     }
                 }
             }
@@ -297,7 +299,7 @@ function moveRight() {
 
 
 //User input
-function checkKey(e) {
+function userInput(e) {
     e = e || window.event;
 
     let arrowPressed = false; //if user pressed a key
@@ -332,11 +334,9 @@ function checkKey(e) {
         arrowPressed = true;
     }
 
-    if(arrowPressed == true) {
-        if(moved) addNumber(); //only adds a number if movement occured
-        renderMatrix();
-    }
-
+    if(moved) addNumber(); //only adds a number if movement occured
+    renderMatrix();
+    
 };
 
 
