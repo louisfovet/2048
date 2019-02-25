@@ -1,10 +1,14 @@
 let matrixHtml = document.getElementById("matrix");
+let matrixDebugHtml = document.getElementById("matrix_debug");
+let userInputHtml = document.getElementById("user_input");
+let btnReset = document.getElementById("reset_btn");
 
 document.onkeydown = checkKey;
 
 const probOf4 = 0.12; //used in generateNumber method
 
 let matrix; //matrix of the game
+
 
 //Initialize the matrix
 function initializeMatrix() {
@@ -33,11 +37,30 @@ function renderMatrix() {
     }
 };
 
+
+//Renders our matrix variable
+function renderDebugMatrix() {
+
+    matrixDebugHtml.innerHTML = null;
+
+    for(let i = 0; i < 4; i++) {
+        for(let j = 0; j < 4; j++) {
+
+            matrixDebugHtml.innerHTML += matrix[i][j];
+            if(j != 3) matrixDebugHtml.innerHTML += " | ";
+
+        }
+        matrixDebugHtml.innerHTML += "<br/>";
+    }
+};
+
+
 //Initialize the game
 function init() {
     initializeMatrix();
     addNumber();
     addNumber();
+    renderDebugMatrix();
     renderMatrix();
 };
 
@@ -265,21 +288,29 @@ function checkKey(e) {
 
     if (e.keyCode == '38') {
         // up arrow
+        userInputHtml.innerHTML = "up";
+        renderDebugMatrix();
         moved = moveUp();
         arrowPressed = true;
     }
     else if (e.keyCode == '40') {
         // down arrow
+        userInputHtml.innerHTML = "down";
+        renderDebugMatrix();
         moved = moveDown();
         arrowPressed = true;
     }
     else if (e.keyCode == '37') {
         // left arrow
+        userInputHtml.innerHTML = "left";
+        renderDebugMatrix();
         moved = moveLeft();
         arrowPressed = true;
     }
     else if (e.keyCode == '39') {
         // right arrow
+        userInputHtml.innerHTML = "right";
+        renderDebugMatrix();
         moved = moveRight();
         arrowPressed = true;
     }
@@ -293,4 +324,12 @@ function checkKey(e) {
 
 
 
+
 init();
+
+
+
+
+btnReset.onclick = function() {
+    init();
+};
